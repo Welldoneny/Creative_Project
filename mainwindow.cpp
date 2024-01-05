@@ -14,25 +14,27 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     connect(this, &MainWindow::redactSignalmain, redactform, &RedactForm::redactSlot);
     //соединяем сигнал о редактировании заметки из воторого окна со слотом по применению этих изменений в главном окне
     connect(redactform, &RedactForm::redactSignalform, this, &MainWindow::slotRedact);
-    //
+    //класс управления настройками
     settings = new QSettings(this);
+    //загружаем настройки
     loadSettings();
 }
 
 MainWindow::~MainWindow()                          //деструктор
 {
-    saveSettings();
+    saveSettings();                                //сохраняем настройки перед выходом
     delete ui;
 }
 
 void MainWindow::saveSettings()
 {
-    settings->setValue("geometry", geometry());
+    settings->setValue("geometry", geometry());     //сохраняем местоположение и размер окна
 }
 
 void MainWindow::loadSettings()
 {
-    setGeometry( settings->value( "geometry", QRect(200, 200, 1000, 680)).toRect() );
+    //устанавливаем положение сохранное в настройках, если пусто то применяются значения по умолчанию
+    setGeometry( settings->value( "geometry", QRect(400, 200, 640, 480)).toRect() );
 }
 
 
@@ -115,33 +117,10 @@ void MainWindow::on_DeleteBtn_clicked()       //надо доработать, �
        "Вы действительно хотите удалить " + choosenNote->GetName(), QMessageBox::Yes | QMessageBox::No);
        if(answer == QMessageBox::Yes)
        {
-           QString nametodelete = choosenNote->GetName();          //сохраняем имя которое нужно удалить
-//           delete ui->NoteList->currentItem();
-//           int n = ui->NoteList->count() - 1;
-//           for(int j=n; j>=0; j--)
-//           {
-//             QListWidgetItem *it = ui->NoteList->item(j);
-//             if (it->isSelected()) delete it;
-//           }
-//           for(int i = 0; i < noteList->size(); i++)                 //ищем позицию в списке названий
-//           {
-//               QListWidgetItem *item = ui->NoteList->item(i);
-//              // QMessageBox::about(this, "", item->text());
-//               if(nametodelete == item->text())
-//               {
-//                   //ui->NoteList->removeItemWidget(item);
-//                   delete ui->NoteList->takeItem(i);
-//                   //delete ui->NoteList->takeItem(i);                //удаляем на форме
-//                   break;
-//               }
-//           }
-//           foreach (QListWidgetItem *NAME, ui->NoteList->selectedItems())
-//           {
-//              delete ui->NoteList->takeItem(ui->NoteList->row(NAME));
-//           }
-           ui->NoteList->blockSignals(true);
-           ui->NoteList->clear();
-           ui->NoteList->blockSignals(false);
+           QString nametodelete = choosenNote->GetName();             //сохраняем имя которое нужно удалить
+           ui->NoteList->blockSignals(true);                          //отключаем сигналы чтобы метод клир работал нормально
+           ui->NoteList->clear();                                     //очищаем форму
+           ui->NoteList->blockSignals(false);                         //без этого костыля появляется ошибка доступа памяти
            for (int i = 0; i < noteList->size(); i++)                 //удаляем в списке имен
            {
                if(nametodelete == names->at(i))
@@ -158,7 +137,7 @@ void MainWindow::on_DeleteBtn_clicked()       //надо доработать, �
                    break;
                }
            }
-           for (int i = 0; i < noteList->size(); i++)                 //удаляем в списке заметок
+           for (int i = 0; i < noteList->size(); i++)                 //добавляем элементы обратно на форму
            {
                ui->NoteList->addItem(noteList->at(i)->GetName());
            }

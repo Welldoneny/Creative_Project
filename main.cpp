@@ -5,8 +5,9 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QApplication::setOrganizationName("НИИ ТПУ");
-    QApplication::setApplicationName("Notix");
+    //настройки неообходимые для корректной работы с реестром виндовс
+    QApplication::setOrganizationName("НИИ ТПУ");    // устанавливаем название организации
+    QApplication::setApplicationName("Notix");       //устанваливаем имя приложения
     // установка стандартного стиля
     a.setStyle("fusion");
     // главное окно

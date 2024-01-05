@@ -1,9 +1,7 @@
 #include "redactform.h"
 #include "ui_redactform.h"
 
-RedactForm::RedactForm(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::RedactForm)
+RedactForm::RedactForm(QWidget *parent): QWidget(parent), ui(new Ui::RedactForm)
 {
     ui->setupUi(this);
 }

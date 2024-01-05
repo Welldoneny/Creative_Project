@@ -15,8 +15,8 @@ class CreationWidget : public QWidget
 public:
     explicit CreationWidget(QWidget *parent = nullptr);
     ~CreationWidget();
-signals :                             ///
-    void signalCreate(Note *note);                 ///
+signals :
+    void signalCreate(Note *note);
 private slots:
     void on_CreateNoteBtn_clicked();
 

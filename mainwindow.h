@@ -21,32 +21,26 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void saveSettings();
-    void loadSettings();
+    void saveSettings();//сохраняет настройки
+    void loadSettings();//загружаем настройки
 public slots:
     void slotCreate(Note *note);
     void slotRedact(QString newname, QDateTime newdate);
 private slots:
     void on_CreateBtn_clicked();
-
     void on_NoteList_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
     void on_NoteEdit_textChanged();
-
     void on_RedactBtn_clicked();
     void on_DeleteBtn_clicked();
-
 signals:
     void redactSignalmain(Note *choosenNote);
 private:
-    Ui::MainWindow *ui;
-    CreationWidget *creationwidget;
-    RedactForm  *redactform;
-    QList<Note*> *noteList;
-    QList<QString> *names;
-    Note *choosenNote = NULL;
-    Note *created_note;
-    Note *chosenforedit = NULL;
-    QSettings *settings;
+    Ui::MainWindow *ui;//интерфейс
+    CreationWidget *creationwidget;//окно создания заметок
+    RedactForm  *redactform;//окно редактирования заметок
+    QList<Note*> *noteList;//список заметок
+    QList<QString> *names;//список названий заметок
+    Note *choosenNote = NULL;//выбранная заметка в текущий момент
+    QSettings *settings;//настройки
 };
 #endif // MAINWINDOW_H
