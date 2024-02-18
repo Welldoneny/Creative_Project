@@ -9,6 +9,7 @@
 #include <QListWidget>
 #include <QMessageBox>
 #include <QSettings>
+#include "loginform.h"
 //#include <windows.h>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -32,12 +33,18 @@ private slots:
     void on_NoteEdit_textChanged();
     void on_RedactBtn_clicked();
     void on_DeleteBtn_clicked();
+
+    void on_SearchEdit_textChanged(const QString &arg1);
+
+    void on_LogInBtn_clicked();
+
 signals:
     void redactSignalmain(Note *choosenNote);
 private:
     Ui::MainWindow *ui;//интерфейс
     CreationWidget *creationwidget;//окно создания заметок
     RedactForm  *redactform;//окно редактирования заметок
+    LoginForm *loginform;//окно регистрации
     QList<Note*> *noteList;//список заметок
     QList<QString> *names;//список названий заметок
     Note *choosenNote = NULL;//выбранная заметка в текущий момент

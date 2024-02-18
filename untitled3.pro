@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     creationwidget.cpp \
+    loginform.cpp \
     main.cpp \
     mainwindow.cpp \
     note.cpp \
@@ -24,12 +25,14 @@ SOURCES += \
 
 HEADERS += \
     creationwidget.h \
+    loginform.h \
     mainwindow.h \
     note.h \
     redactform.h
 
 FORMS += \
     creationwidget.ui \
+    loginform.ui \
     mainwindow.ui \
     redactform.ui
 

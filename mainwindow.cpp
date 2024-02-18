@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     noteList = new QList<Note*>; //список заметок
     names = new QList<QString>; //список названий заметок
     creationwidget = new CreationWidget(); //окно для создания заметки
+    loginform = new LoginForm();//окно регистрации
     redactform = new RedactForm(); // окно редактирования заметки
     //соединяем сигнал создания заметки из окна создания заметок со слотом по созданию заметки в главном окне
     connect(creationwidget, &CreationWidget::signalCreate, this, &MainWindow::slotCreate);
@@ -18,6 +19,15 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     settings = new QSettings(this);
     //загружаем настройки
     loadSettings();
+
+    //подсказки
+    ui->SearchEdit->setToolTip("Уберите текст из поля, чтобы вернуть все заметки");
+    ui->SearchEdit->setToolTipDuration(0);
+
+    ui->CreateBtn->setToolTip("Здесь вы можете создать новую заметку");
+    ui->RedactBtn->setToolTip("Здесь вы можете изменить название заметки");
+    ui->DeleteBtn->setToolTip("Здесь вы можете безвозвратно удалить заметку");
+
 }
 
 MainWindow::~MainWindow()                          //деструктор
@@ -48,7 +58,7 @@ void MainWindow::slotCreate(Note *note)                 //слот создан�
     ui->NoteList->addItem(note->GetName());             //добавляем заметку в список на форме
     ui->NoteEdit->setText(choosenNote->GetContent());   //открываем новую заметку для редактирования
     noteList->append(note);                             //добавляем новую заметку в список
-    names->append(note->GetName());
+    names->append(note->GetName());                     //добавляем имя заметки в список имен заметок
 }
 
 void MainWindow::slotRedact(QString newname, QDateTime newdate)
@@ -109,7 +119,7 @@ void MainWindow::on_RedactBtn_clicked()              //слот вызывающ
     }
 }
 
-void MainWindow::on_DeleteBtn_clicked()       //надо доработать, некорректно удаляет последний элемент
+void MainWindow::on_DeleteBtn_clicked()
 {
     if(choosenNote != NULL ) //&& noteList->size() > 1
     {
@@ -143,4 +153,33 @@ void MainWindow::on_DeleteBtn_clicked()       //надо доработать, �
            }
        }
     }
+}
+
+
+void MainWindow::on_SearchEdit_textChanged(const QString &arg1) //поиск заметки
+{
+    //переписывает список заметок так, чтобы первым стоял тот, у которого совпадает имя
+    QString search = arg1;                  //имя заметки которую мы ищем
+
+    ui->NoteList->blockSignals(true);                          //отключаем сигналы чтобы метод клир работал нормально
+    ui->NoteList->clear();                                     //очищаем форму
+    ui->NoteList->blockSignals(false);                         //без этого костыля появляется ошибка доступа памяти
+    for (int i = 0; i < noteList->size(); i++)                 //добавляем элементы обратно на форму
+    {
+        QString itemname = noteList->at(i)->GetName();         //ключ по которому ищем
+
+        if(itemname.contains(search))                          //если он есть в названии
+        {
+            ui->NoteList->addItem(noteList->at(i)->GetName()); //добавляем на форму
+        }
+        else                                                   //иначе пропускаем
+        {
+            continue;
+        }
+    }
+}
+
+void MainWindow::on_LogInBtn_clicked()                        //слот вызывающийся сигналом клика
+{
+    loginform->show();                                        //показывает окно регистрации
 }
