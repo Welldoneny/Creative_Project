@@ -1,6 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "operation_systems.h"
+#include <QFile> // Подключаем класс QFile
+#include <QTextStream> // Подключаем класс QTextStream
+#include <QDebug>
+#include <QProcess>
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -52,8 +56,8 @@ void MainWindow::on_CreateBtn_clicked()                 //слот вызыва�
 {
     creationwidget->show();                             //показывает окно создания заметки
 }
-void MainWindow::slotCreate(Note *note)                 //слот создания заметки вызвается сигналом создания заметки из окна создания заметки
-{
+void MainWindow::slotCreate(Note *note)                 //слот создания заметки вызвается сигналом
+{                                                       //создания заметки из окна создания заметки
     choosenNote = note;                                 //устанавливаем выбранную заметку как новосозданную
     ui->NoteList->addItem(note->GetName());             //добавляем заметку в список на форме
     ui->NoteEdit->setText(choosenNote->GetContent());   //открываем новую заметку для редактирования
@@ -150,6 +154,20 @@ void MainWindow::on_DeleteBtn_clicked()
            for (int i = 0; i < noteList->size(); i++)                 //добавляем элементы обратно на форму
            {
                ui->NoteList->addItem(noteList->at(i)->GetName());
+           }
+           if(OPERATION_SYSTEM_OF_USER == 1)
+           {
+               QFile filedel("del.bat");
+               if(filedel.open(QIODevice::WriteOnly | QIODevice::Text))    // Если файл успешно открыт для записи в текстовом режиме
+               {                                                           // Создаем объект класса QTextStream
+                   QProcess process;
+                   QTextStream writeStream(&filedel);                      // и передаем ему адрес объекта fileOut
+                   writeStream <<"schtasks /delete /tn " + nametodelete;
+                   filedel.close();
+                   process.start("del.bat");                              // Запуск файла del.bat
+                   process.waitForFinished();
+                   filedel.remove();
+               }
            }
        }
     }

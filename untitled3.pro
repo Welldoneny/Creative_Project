@@ -21,6 +21,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     note.cpp \
+    operation_systems.cpp \
     redactform.cpp
 
 HEADERS += \
@@ -28,6 +29,7 @@ HEADERS += \
     loginform.h \
     mainwindow.h \
     note.h \
+    operation_systems.h \
     redactform.h
 
 FORMS += \
