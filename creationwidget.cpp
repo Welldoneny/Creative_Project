@@ -62,9 +62,9 @@ Note* CreationWidget::Create()                                      //метод
             + formattedTime + " /sd " + formattedDate +
             " /tn " + note->GetName() + " /tr " + name + ".txt";
             fileOut.close();                                        // Закрываем файл
-//            process.start("file.bat");                              // Запуск файла file.bat
-//            process.waitForFinished();
-//          fileOut.remove();
+            process.start("file.bat");                              // Запуск файла file.bat
+            process.waitForFinished();
+            fileOut.remove();
 //qDebug() <<"Содержимое fileOut: schtasks /create /sc once /st "
 //           + formattedTime + " /sd " + formattedDate +
 //           " /tn " + note->GetName() + " /tr " + name + ".txt";
